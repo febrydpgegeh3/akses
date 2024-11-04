@@ -1,8 +1,12 @@
 local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
 
--- URL untuk data akses di Pastebin (ganti 'YOUR_PASTEBIN_ID' dengan ID Pastebin Anda)
-local pastebinUrl = "https://pastebin.com/raw/21zjhmJg"
+-- Data akses lokal (ganti key dan durasi sesuai kebutuhan)
+local accessData = {
+    key1 = 3600, -- durasi akses dalam detik
+    key2 = 7200, -- durasi akses dalam detik
+    -- Tambahkan key dan durasi lainnya sesuai kebutuhan
+}
 
 -- Fungsi untuk menampilkan notifikasi
 local function notify(Title, Text, Duration)
@@ -14,25 +18,9 @@ local function notify(Title, Text, Duration)
     })
 end
 
--- Fungsi untuk mengambil data akses dari Pastebin
-local function getAccessData()
-    local success, response = pcall(function()
-        return HttpService:GetAsync(pastebinUrl)
-    end)
-    
-    if success then
-        return HttpService:JSONDecode(response) -- Mengembalikan data dalam format tabel
-    else
-        warn("Gagal mengambil data dari Pastebin: " .. tostring(response))
-        return nil
-    end
-end
-
 -- Fungsi untuk memeriksa apakah key memiliki akses
 local function hasAccess(inputKey)
-    local accessData = getAccessData()
-    
-    if accessData and accessData[inputKey] then
+    if accessData[inputKey] then
         local duration = accessData[inputKey]
         notify("Akses diterima!", "Durasi akses: " .. math.floor(duration / 60) .. " menit", 5)
         return true, duration
