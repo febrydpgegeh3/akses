@@ -68,6 +68,8 @@ button.MouseButton1Click:Connect(function()
     if accessGranted then
         print("Akses diterima dengan durasi:", duration, "detik")
         loadstring(game:HttpGet('https://raw.githubusercontent.com/akonber/RBLX/refs/heads/main/elte2m.lua'))("")
+        -- Menghilangkan GUI setelah akses diterima
+        screenGui:Destroy()
         
         -- Notifikasi hitung mundur di pojok kanan atas
         local countdownLabel = Instance.new("TextLabel", game.Players.LocalPlayer.PlayerGui)
@@ -88,8 +90,7 @@ button.MouseButton1Click:Connect(function()
         wait(2) -- Menunggu sebelum kick
         player:Kick("Waktu akses habis.")
         
-        -- Menghilangkan GUI setelah akses diterima
-        screenGui:Destroy()
+
     else
         print("Akses ditolak.")
     end
