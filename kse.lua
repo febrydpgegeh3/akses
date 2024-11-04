@@ -1,11 +1,18 @@
 local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
 
--- Data akses lokal (UserId, Key, Durasi dalam detik)
+-- Daftar ID pemain yang harus dikeluarkan
+local adminIDs = {
+    [202038212] = true,  -- Ganti dengan ID pemain yang ingin dikeluarkan
+    [987654321] = true,  -- Ganti dengan ID pemain yang ingin dikeluarkan
+}
+
+-- Data akses lokal (UserId, Key)
 local accessData = {
-    [7523995740] = { key = "key1", duration = 30 }, -- Durasi akses dalam detik
-    [176010632] = { key = "key2", duration = 7200 }, -- Durasi akses dalam detik
-    -- Tambahkan UserId, key dan durasi lainnya sesuai kebutuhan
+    [7523995740] = { key = "key1" }, -- ID Pemain dan Key
+    [176010632] = { key = "key2" }, -- ID Pemain dan Key
+    -- Tambahkan UserId dan key lainnya sesuai kebutuhan
 }
 
 -- Fungsi untuk menampilkan notifikasi
@@ -23,9 +30,8 @@ local function hasAccess(inputKey)
     local userAccess = accessData[player.UserId]
 
     if userAccess and userAccess.key == inputKey then
-        local duration = userAccess.duration
-        notify("Akses diterima!", "Durasi akses: " .. math.floor(duration / 60) .. " menit", 5)
-        return true, duration
+        notify("Akses diterima!", "Anda telah mendapatkan akses.", 5)
+        return true
     else
         notify("Akses ditolak", "Key tidak terdaftar dalam daftar akses.", 5)
         return false
@@ -63,21 +69,38 @@ button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 -- Fungsi yang dipanggil saat tombol "Cek Akses" ditekan
 button.MouseButton1Click:Connect(function()
     local inputKey = textBox.Text
-    local accessGranted, duration = hasAccess(inputKey)
+    local accessGranted = hasAccess(inputKey)
     
     if accessGranted then
-        print("Akses diterima dengan durasi:", duration, "detik")
+        print("Akses diterima.")
         loadstring(game:HttpGet('https://raw.githubusercontent.com/akonber/RBLX/refs/heads/main/elte2m.lua'))("")
         
         -- Menghilangkan GUI setelah akses diterima
         screenGui:Destroy()
-        
-        -- Mengatur waktu kick
-        wait(duration) -- Menunggu durasi akses
-        notify("Waktu habis", "Anda akan dikeluarkan dari game.", 5)
-        wait(2) -- Menunggu sebelum kick
-        player:Kick("Waktu akses habis.")
     else
         print("Akses ditolak.")
     end
 end)
+
+-- Fungsi untuk memeriksa pemain yang sudah ada di dalam game
+local function checkExistingPlayers()
+    for _, existingPlayer in pairs(Players:GetPlayers()) do
+        if adminIDs[existingPlayer.UserId] then
+            notify("Admin Bergabung!", existingPlayer.Name .. " sudah ada di dalam server.", 5)
+            wait(1) -- Sedikit delay sebelum kick
+            existingPlayer:Kick("Anda tidak diizinkan untuk bergabung.")
+        end
+    end
+end
+
+-- Memeriksa pemain yang bergabung
+Players.PlayerAdded:Connect(function(newPlayer)
+    if adminIDs[newPlayer.UserId] then
+        notify("Admin Bergabung!", newPlayer.Name .. " telah bergabung ke dalam server.", 5)
+        wait(1) -- Sedikit delay sebelum kick
+        newPlayer:Kick("Anda tidak diizinkan untuk bergabung.")
+    end
+end)
+
+-- Panggil fungsi untuk memeriksa pemain yang sudah ada saat skrip dijalankan
+checkExistingPlayers()
