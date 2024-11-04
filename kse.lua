@@ -3,7 +3,7 @@ local player = game.Players.LocalPlayer
 
 -- Data akses lokal (UserId, Key, Durasi dalam detik)
 local accessData = {
-    [7523995740] = { key = "key1", duration = 3600 }, -- Durasi akses dalam detik
+    [176010631] = { key = "key1", duration = 3600 }, -- Durasi akses dalam detik
     [176010632] = { key = "key2", duration = 7200 }, -- Durasi akses dalam detik
     -- Tambahkan UserId, key dan durasi lainnya sesuai kebutuhan
 }
@@ -44,21 +44,9 @@ local titleLabel = Instance.new("TextLabel", frame)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.Size = UDim2.new(1, 0, 0.2, 0)
 titleLabel.Text = "Masukkan Key Akses"
+titleLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- RGB untuk judul
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextScaled = true
-
--- Fungsi untuk mengubah warna latar belakang judul dengan transisi halus
-local function fadeTitleColor()
-    local colors = {Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0), Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 0)}
-    local index = 1
-    while true do
-        titleLabel.BackgroundColor3 = colors[index]
-        index = index % #colors + 1
-        wait(1) -- Durasi setiap warna
-    end
-end
-
-fadeTitleColor() -- Memanggil fungsi perubahan warna
 
 local textBox = Instance.new("TextBox", frame)
 textBox.Position = UDim2.new(0.1, 0, 0.3, 0)
@@ -89,6 +77,7 @@ button.MouseButton1Click:Connect(function()
         countdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         countdownLabel.TextScaled = true
 
+        -- Hitung mundur
         for remaining = duration, 0, -1 do
             countdownLabel.Text = "Waktu tersisa: " .. math.floor(remaining / 60) .. " menit " .. (remaining % 60) .. " detik"
             wait(1)
