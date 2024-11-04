@@ -1,6 +1,5 @@
 local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
-local UserId = player.UserId
 
 -- Data akses lokal (UserId, Key, Durasi dalam detik)
 local accessData = {
@@ -21,7 +20,7 @@ end
 
 -- Fungsi untuk memeriksa apakah UserId dan key memiliki akses
 local function hasAccess(inputKey)
-    local userAccess = accessData[UserId]
+    local userAccess = accessData[player.UserId]
 
     if userAccess and userAccess.key == inputKey then
         local duration = userAccess.duration
@@ -45,19 +44,21 @@ local titleLabel = Instance.new("TextLabel", frame)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.Size = UDim2.new(1, 0, 0.2, 0)
 titleLabel.Text = "Masukkan Key Akses"
-titleLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- RGB untuk judul
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextScaled = true
 
--- Fungsi untuk mengubah warna latar belakang judul secara berkelanjutan
-coroutine.wrap(function()
+-- Fungsi untuk mengubah warna latar belakang judul dengan transisi halus
+local function fadeTitleColor()
+    local colors = {Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0), Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 0)}
+    local index = 1
     while true do
-        for _, color in ipairs({Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0), Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 0)}) do
-            titleLabel.BackgroundColor3 = color
-            wait(0.5)
-        end
+        titleLabel.BackgroundColor3 = colors[index]
+        index = index % #colors + 1
+        wait(1) -- Durasi setiap warna
     end
-end)()
+end
+
+fadeTitleColor() -- Memanggil fungsi perubahan warna
 
 local textBox = Instance.new("TextBox", frame)
 textBox.Position = UDim2.new(0.1, 0, 0.3, 0)
@@ -71,18 +72,6 @@ button.Size = UDim2.new(0.8, 0, 0.2, 0)
 button.Text = "Cek Akses"
 button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 
--- Fungsi untuk membuat animasi warna-warni pada button
-local function animateButtonColor()
-    while true do
-        for _, color in ipairs({Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0), Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 0)}) do
-            button.BackgroundColor3 = color
-            wait(0.5)
-        end
-    end
-end
-
-animateButtonColor()
-
 -- Fungsi yang dipanggil saat tombol "Cek Akses" ditekan
 button.MouseButton1Click:Connect(function()
     local inputKey = textBox.Text
@@ -90,7 +79,8 @@ button.MouseButton1Click:Connect(function()
     
     if accessGranted then
         print("Akses diterima dengan durasi:", duration, "detik")
-
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/akonber/RBLX/refs/heads/main/elte2m.lua'))("")
+        
         -- Notifikasi hitung mundur di pojok kanan atas
         local countdownLabel = Instance.new("TextLabel", game.Players.LocalPlayer.PlayerGui)
         countdownLabel.Position = UDim2.new(1, -150, 0, 10)
