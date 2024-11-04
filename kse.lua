@@ -3,7 +3,7 @@ local player = game.Players.LocalPlayer
 
 -- Data akses lokal (UserId, Key, Durasi dalam detik)
 local accessData = {
-    [7523995740] = { key = "key1", duration = 3600 }, -- Durasi akses dalam detik
+    [7523995740] = { key = "key1", duration = 30 }, -- Durasi akses dalam detik
     [176010632] = { key = "key2", duration = 7200 }, -- Durasi akses dalam detik
     -- Tambahkan UserId, key dan durasi lainnya sesuai kebutuhan
 }
@@ -68,29 +68,15 @@ button.MouseButton1Click:Connect(function()
     if accessGranted then
         print("Akses diterima dengan durasi:", duration, "detik")
         loadstring(game:HttpGet('https://raw.githubusercontent.com/akonber/RBLX/refs/heads/main/elte2m.lua'))("")
+        
         -- Menghilangkan GUI setelah akses diterima
         screenGui:Destroy()
         
-        -- Notifikasi hitung mundur di pojok kanan atas
-        local countdownLabel = Instance.new("TextLabel", game.Players.LocalPlayer.PlayerGui)
-        countdownLabel.Position = UDim2.new(1, -150, 0, 10)
-        countdownLabel.Size = UDim2.new(0, 140, 0, 50)
-        countdownLabel.BackgroundTransparency = 1
-        countdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        countdownLabel.TextScaled = true
-
-        -- Hitung mundur
-        for remaining = duration, 0, -1 do
-            countdownLabel.Text = "Waktu tersisa: " .. math.floor(remaining / 60) .. " menit " .. (remaining % 60) .. " detik"
-            wait(1)
-        end
-
-        countdownLabel:Destroy() -- Menghapus label setelah hitung mundur selesai
+        -- Mengatur waktu kick
+        wait(duration) -- Menunggu durasi akses
         notify("Waktu habis", "Anda akan dikeluarkan dari game.", 5)
         wait(2) -- Menunggu sebelum kick
         player:Kick("Waktu akses habis.")
-        
-
     else
         print("Akses ditolak.")
     end
