@@ -3,7 +3,7 @@ local player = game.Players.LocalPlayer
 
 -- Data akses lokal (UserId, Key, Durasi dalam detik)
 local accessData = {
-    [176010631] = { key = "key1", duration = 3600 }, -- Durasi akses dalam detik
+    [7523995740] = { key = "key1", duration = 3600 }, -- Durasi akses dalam detik
     [176010632] = { key = "key2", duration = 7200 }, -- Durasi akses dalam detik
     -- Tambahkan UserId, key dan durasi lainnya sesuai kebutuhan
 }
